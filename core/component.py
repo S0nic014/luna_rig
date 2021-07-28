@@ -259,6 +259,13 @@ class AnimComponent(Component):
         result = Hook(connections[0]) if connections else None  # type: Hook
         return result
 
+    @property
+    def in_hook_index(self):
+        hook = self.in_hook
+        if hook:
+            return hook.index
+        return None
+
     @ property
     def actions_dict(self):
         actions = {}
