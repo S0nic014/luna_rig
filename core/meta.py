@@ -123,6 +123,36 @@ class MetaNode(object):
     def meta_children(self):
         return self.get_meta_children()
 
+    # ========== Getter methods ============ #
+    def get_namespace_list(self):
+        return self.namespace_list
+
+    def get_name(self):
+        return self.name
+
+    def get_side(self):
+        return self.side
+
+    def get_index(self):
+        return self.index
+
+    def get_indexed_name(self):
+        return self.indexed_name
+
+    def get_suffix(self):
+        return self.suffix
+
+    def get_meta_type(self):
+        return self.meta_type
+
+    def get_tag(self):
+        return self.tag
+
+    def get_meta_parent(self):
+        return self.meta_parent
+
+    # ========= Other Methods ==========#
+
     @classmethod
     def is_metanode(cls, node):
         node = pm.PyNode(node)

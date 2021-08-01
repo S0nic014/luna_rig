@@ -271,6 +271,51 @@ class AnimComponent(Component):
         actions = {}
         return actions
 
+    # ========= Getter methods ========== #
+    def get_root(self):
+        return self.root
+
+    def get_group_ctls(self):
+        return self.group_ctls
+
+    def get_group_joints(self):
+        return self.group_joints
+
+    def get_group_parts(self):
+        return self.group_parts
+
+    def get_group_noscale(self):
+        return self.group_noscale
+
+    def get_group_out(self):
+        return self.group_out
+
+    def get_controls(self):
+        return self.controls
+
+    def get_bind_joints(self):
+        return self.bind_joints
+
+    def get_ctl_chain(self):
+        return self.ctl_chain
+
+    def get_character(self):
+        return self.character
+
+    def get_out_hooks(self):
+        return self.out_hooks
+
+    def get_in_hook(self):
+        return self.in_hook
+
+    def get_in_hook_index(self):
+        return self.in_hook_index
+
+    def get_actions_dict(self):
+        return self.actions_dict
+
+    # ========= Other methods ========== #
+
     def set_outliner_color(self, color):
         outlinerFn.set_color(self.root, color)
 
