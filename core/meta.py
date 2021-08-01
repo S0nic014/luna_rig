@@ -26,6 +26,8 @@ class MetaNode(object):
         return "{0} ({1})".format(self.as_str(name_only=True), self.pynode.name())
 
     def __eq__(self, other):
+        if not hasattr(other, 'pynode'):
+            return False
         return self.pynode == other.pynode
 
     def __new__(cls, node=None):
