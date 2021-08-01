@@ -69,6 +69,34 @@ class Character(luna_rig.Component):
         actions = {}
         return actions
 
+    # ======== Getter methods ========== #
+    def get_root_control(self):
+        return self.root_control
+
+    def get_control_rig(self):
+        return self.control_rig
+
+    def get_deformation_rig(self):
+        return self.deformation_rig
+
+    def get_geometry_grp(self):
+        return self.geometry_grp
+
+    def get_locators_grp(self):
+        return self.locators_grp
+
+    def get_world_locator(self):
+        return self.world_locator
+
+    def get_util_grp(self):
+        return self.util_grp
+
+    def get_root_motion(self):
+        return self.root_motion
+
+    def get_clamped_size(self):
+        return self.clamped_size
+
     @ classmethod
     def find(cls, name):
         result = []
