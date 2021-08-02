@@ -302,9 +302,6 @@ class AnimComponent(Component):
     def get_character(self):
         return self.character
 
-    def get_out_hooks(self):
-        return self.out_hooks
-
     def get_in_hook(self):
         return self.in_hook
 
