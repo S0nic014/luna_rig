@@ -26,6 +26,16 @@ class SpineComponent(luna_rig.AnimComponent):
     def chest_control(self):
         return luna_rig.Control(self.pynode.chestControl.listConnections()[0])
 
+    # ========= Getter methods ========== #
+    def get_root_control(self):
+        return self.root_control
+
+    def get_hips_control(self):
+        return self.hips_control
+
+    def get_chest_control(self):
+        return self.chest_control
+
     @classmethod
     def create(cls,
                meta_parent=None,
@@ -38,7 +48,6 @@ class SpineComponent(luna_rig.AnimComponent):
         instance.pynode.addAttr("rootControl", at="message")
         instance.pynode.addAttr("hipsControl", at="message")
         instance.pynode.addAttr("chestControl", at="message")
-        instance.pynode.addAttr("ikCurve", at="message")
         return instance
 
 
@@ -69,6 +78,27 @@ class FKIKSpineComponent(SpineComponent):
         else:
             return luna_rig.Control(self.pynode.pivotControl.listConnections()[0])
 
+    @property
+    def ik_curve(self):
+        crv = self.pynode.ikCurve.get()  # type: luna_rig.nt.Transform
+        return crv
+
+    # ========= Getter methods ========== #
+    def get_mid_control(self):
+        return self.mid_control
+
+    def get_fk1_control(self):
+        return self.fk1_control
+
+    def get_fk2_control(self):
+        return self.fk2_control
+
+    def get_pivot_control(self):
+        return self.pivot_control
+
+    def get_ik_curve(self):
+        return self.ik_curve
+
     @classmethod
     def create(cls,
                meta_parent=None,
@@ -83,6 +113,7 @@ class FKIKSpineComponent(SpineComponent):
         instance = super(FKIKSpineComponent, cls).create(meta_parent=meta_parent, side=side, name=name, character=character, tag=tag)  # type: FKIKSpineComponent
         instance.pynode.addAttr("fkControls", at="message", multi=1, im=0)
         instance.pynode.addAttr("midControl", at="message")
+        instance.pynode.addAttr("ikCurve", at="message")
 
         # Joint chains
         joint_chain = jointFn.joint_chain(start_joint, end_joint)
