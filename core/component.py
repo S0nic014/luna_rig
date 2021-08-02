@@ -426,6 +426,8 @@ class AnimComponent(Component):
         """
         if isinstance(index, enumFn.Enum):
             index = index.value
+        elif isinstance(index, float):
+            index = int(index)
         try:
             hook = self.out_hooks[index]
         except IndexError:
@@ -451,6 +453,9 @@ class AnimComponent(Component):
         if not other_comp:
             return
         super(AnimComponent, self).attach_to_component(other_comp)
+        if isinstance(hook_index, float):
+            hook_index = int(hook_index)
+
         if hook_index is None:
             pass
         else:
@@ -458,7 +463,7 @@ class AnimComponent(Component):
                 hook = other_comp.get_hook(index=hook_index)  # type: Hook
                 hook.add_output(self)
             except Exception:
-                Logger.error("Failed to connect {0} to {1} at point {2}".format(self, other_comp, hook))
+                Logger.error("Failed to connect {0} to {1} at point {2}".format(self, other_comp, hook_index))
                 raise
         self.signals.attached.emit(other_comp)
 
