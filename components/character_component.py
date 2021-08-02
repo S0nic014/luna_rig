@@ -297,6 +297,10 @@ class Character(luna_rig.Component):
         root_joint.metaParent.connect(self.pynode.rootMotionJoint)
         return root_joint
 
+    def attach_to_skeleton(self):
+        for comp in self.meta_children:
+            comp.attach_to_skeleton()
+
     def create_controls_set(self, name="controls_set", tag=None):
         name = nameFn.add_namespaces(name, self.namespace_list)
         result = None
