@@ -391,6 +391,19 @@ class Control(object):
         char = comp if isinstance(comp, luna_rig.components.Character) else comp.character  # type: luna_rig.components.Character
         return char
 
+    # ======== Getter methods ============ #
+    def get_tag(self):
+        return self.tag
+
+    def get_joint(self):
+        return self.joint
+
+    def get_connected_component(self):
+        return self.connected_component
+
+    def get_character(self):
+        return self.character
+
     @classmethod
     def is_control(cls, node):
         """Test if specified node is a controller
@@ -528,17 +541,14 @@ class Control(object):
         opposite_ctl.mirror_shape(behaviour=behaviour, flip=flip, flip_across=flip_across)
         opposite_ctl.color = old_color
 
-    def add_space(self, target, name, method="matrix"):
+    def add_space(self, target, name, via_matrix=True):
         # Process inputs
-        if method not in ["constr", "matrix"]:
-            raise ValueError("Invalid space method, should be constraint or matrix")
-
-        if pm.about(api=1) < 20200100 and method == "matrix":
+        if pm.about(api=1) < 20200100 and via_matrix:
             Logger.warning("Matrix space method requires Maya 2020+. Using constraint method instead.")
-            method = "constr"
+            via_matrix = False
 
         # Add divider if matrix
-        if method == "matrix" and not self.transform.hasAttr("SPACE_SWITCHING"):
+        if via_matrix and not self.transform.hasAttr("SPACE_SWITCHING"):
             attrFn.add_divider(self.transform, "SPACE_SWITCHING")
 
         if isinstance(target, Control):
@@ -567,14 +577,14 @@ class Control(object):
         pm.setEnums(self.transform.attr("space"), enum_names)
 
         # Create switch logic
-        if method == "matrix":
+        if via_matrix:
             self.__add_matrix_space(target, name)
-        elif method == "constr":
+        else:
             self.__add_constr_space(target, name)
         # Store as component setting
         if self.connected_component:
             self.connected_component._store_settings(self.transform.space)
-            if method == "matrix":
+            if via_matrix:
                 self.connected_component._store_settings(self.transform.spaceUseTranslate)
                 self.connected_component._store_settings(self.transform.spaceUseRotate)
                 self.connected_component._store_settings(self.transform.spaceUseScale)
@@ -642,10 +652,10 @@ class Control(object):
         condition.outColorR.connect(parent_constr.getWeightAliasList()[-1])
         pm.parent(space_node, target)
 
-    def add_world_space(self, method="matrix"):
+    def add_world_space(self, via_matrix=True):
         """Uses add space method to add space to hidden world locator
         """
-        self.add_space(self.character.world_locator, "World", method)
+        self.add_space(self.character.world_locator, "World", via_matrix)
 
     def switch_space(self, index, matching=True):
         if not self.transform.hasAttr("space"):
