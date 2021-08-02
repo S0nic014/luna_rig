@@ -19,6 +19,13 @@ class FootComponent(luna_rig.AnimComponent):
     def fk_control(self):
         return luna_rig.Control(self.pynode.fkControl.listConnections(d=1)[0])
 
+    # ============= Getter methods =============== #
+    def get_roll_axis(self):
+        return self.roll_axis
+
+    def get_fk_control(self):
+        return self.fk_control
+
     @classmethod
     def create(cls,
                meta_parent=None,
