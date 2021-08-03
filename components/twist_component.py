@@ -55,12 +55,25 @@ class TwistComponent(luna_rig.AnimComponent):
         # Process arguments
         if not side:
             side = meta_parent.side
+        # Start end joints
+        if not isinstance(start_joint, pm.PyNode):
+            start_joint = pm.PyNode(start_joint)
+
         if not end_joint:
             end_joint = start_joint.getChildren()[0]
+        elif not isinstance(end_joint, pm.PyNode):
+            end_joint = pm.PyNode(end_joint)
+
+        # Start end objects
         if not start_object:
             start_object = start_joint
         if not end_object:
             end_object = end_joint
+        if not isinstance(start_object, pm.PyNode):
+            start_object = pm.PyNode(start_object)
+        if not isinstance(end_object, pm.PyNode):
+            end_object = pm.PyNode(end_object)
+
         name = "_".join([meta_parent.indexed_name, name])
 
         # Create instance and add attrs to metanode
