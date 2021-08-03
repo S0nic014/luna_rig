@@ -89,6 +89,9 @@ class FKIKComponent(luna_rig.AnimComponent):
     def get_fkik_state(self):
         return self.fkik_state
 
+    def get_fk_control_at(self, index):
+        return self.fk_controls[int(index)]
+
     def set_fkik_state(self, value):
         self.fkik_state = value
 
@@ -274,6 +277,9 @@ class FKIKComponent(luna_rig.AnimComponent):
         if self.in_hook:
             pm.parentConstraint(self.in_hook.transform, self.group_joints_offset, mo=1)
             pm.parentConstraint(self.in_hook.transform, self.fk_controls[0].group, mo=1)
+
+    def hide_last_fk(self):
+        self.fk_controls[-1].group.hide()
 
     def switch_fkik(self, matching=True):
         # If in FK -> match IK to FK and switch to IK

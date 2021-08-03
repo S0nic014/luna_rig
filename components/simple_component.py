@@ -50,3 +50,18 @@ class SimpleComponent(luna_rig.AnimComponent):
         super(SimpleComponent, self).attach_to_component(other_comp, hook_index=hook_index)
         if self.in_hook:
             pm.parentConstraint(self.in_hook.transform, self.group_ctls)
+
+    def add_existing_control(self, control, as_hook=False, bind_joint=None):
+
+        control.rename(name='_'.join([self.indexed_name, control.name]))
+
+        # Connect to hook
+        self._store_controls([control])
+        # Store hook
+        if as_hook:
+            self.add_hook(control.transform, control.name)
+        # Add bind joint
+        if bind_joint:
+            pm.parentConstraint(control.transform, bind_joint, mo=True)
+            attrFn.add_meta_attr(bind_joint)
+            self._store_bind_joints([bind_joint])
