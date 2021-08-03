@@ -55,6 +55,13 @@ class HandComponent(luna_rig.AnimComponent):
             ctl.scale(1.0, 2)
         return fk_component
 
+    def five_finger_setup(self, thumb_start, index_start, middle_start, ring_start, pinky_start, tip_control=False):
+        names = ['thumb', 'index', 'middle', 'ring', 'pinky']
+        out_fingers = []
+        for name, joint_name in zip(names, (thumb_start, index_start, middle_start, ring_start, pinky_start)):
+            out_fingers.append(self.add_fk_finger(joint_name, end_control=None, name='{0}_finger'.format(name), end_joint=tip_control))
+        return out_fingers
+
     def attach_to_component(self, other_comp, hook_index=None):
         super(HandComponent, self).attach_to_component(other_comp, hook_index=hook_index)
         if self.in_hook:
