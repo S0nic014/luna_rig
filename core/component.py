@@ -308,6 +308,9 @@ class AnimComponent(Component):
     def get_in_hook_index(self):
         return self.in_hook_index
 
+    def get_hook_transform(self, hook_index):
+        return self.get_hook(hook_index).transform
+
     def get_actions_dict(self):
         return self.actions_dict
 

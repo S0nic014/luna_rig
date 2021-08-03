@@ -60,6 +60,13 @@ class FKIKComponent(luna_rig.AnimComponent):
     def fkik_state(self, value):
         self.param_control.transform.fkik.set(value)
 
+    @property
+    def actions_dict(self):
+        actions = super(FKIKComponent, self).actions_dict
+        actions = {"Switch FKIK": {"callback": self.switch_fkik,
+                                   "icon": "switch.png"}}
+        return actions
+
     # ========= Getter methods ========== #
     def get_ik_control(self):
         return self.ik_control
@@ -84,12 +91,6 @@ class FKIKComponent(luna_rig.AnimComponent):
 
     def set_fkik_state(self, value):
         self.fkik_state = value
-
-    def actions_dict(self):
-        actions = super(FKIKComponent, self).actions_dict
-        actions = {"Switch FKIK": {"callback": self.switch_fkik,
-                                   "icon": "switch.png"}}
-        return actions
 
     @classmethod
     def create(cls,
