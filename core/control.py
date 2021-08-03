@@ -105,6 +105,9 @@ class Control(object):
         ctl_joint = None
         if isinstance(parent, Control):
             temp_parent = parent.transform
+        elif isinstance(parent, str) and parent:
+            parent = pm.PyNode(parent)
+            temp_parent = parent
         else:
             temp_parent = parent
 
@@ -403,6 +406,9 @@ class Control(object):
 
     def get_character(self):
         return self.character
+
+    def get_transform(self):
+        return self.transform
 
     @classmethod
     def is_control(cls, node):
