@@ -162,5 +162,11 @@ class HeadComponent(FKComponent):
 
         return instance
 
+    def get_head_hook_index(self):
+        return self.Hooks.HEAD
+
+    def get_neck_base_hook_index(self):
+        return self.Hooks.NECK_BASE
+
     def add_orient_attr(self):
         self.head_control.add_orient_switch(self.character.world_locator, self.neck_controls[-1])

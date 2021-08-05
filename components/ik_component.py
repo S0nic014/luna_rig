@@ -35,6 +35,13 @@ class IKComponent(luna_rig.AnimComponent):
         transform = self.pynode.jointOffsetGrp.get()  # type: luna_rig.nt.Transform
         return transform
 
+    # ============= Getter methods ============== #
+    def get_start_hook_index(self):
+        return self.Hooks.START_JNT.value
+
+    def get_end_hook_index(self):
+        return self.Hooks.END_JNT.value
+
     @classmethod
     def create(cls,
                meta_parent=None,

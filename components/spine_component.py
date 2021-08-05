@@ -99,6 +99,18 @@ class FKIKSpineComponent(SpineComponent):
     def get_ik_curve(self):
         return self.ik_curve
 
+    def get_root_hook_index(self):
+        return self.Hooks.ROOT.value
+
+    def get_hips_hook_index(self):
+        return self.Hooks.HIPS.value
+
+    def get_mid_hook_index(self):
+        return self.Hooks.MID.value
+
+    def get_chest_hook_index(self):
+        return self.Hooks.CHEST.value
+
     @classmethod
     def create(cls,
                meta_parent=None,
