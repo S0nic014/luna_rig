@@ -44,7 +44,7 @@ class SpineComponent(luna_rig.AnimComponent):
                name='spine',
                tag="body"):
         # Create instance and add attrs
-        instance = super(SpineComponent, cls).create(meta_parent=meta_parent, side=side, name=name, character=character, tag="tag")  # type: SpineComponent
+        instance = super(SpineComponent, cls).create(meta_parent=meta_parent, side=side, name=name, character=character, tag=tag)  # type: SpineComponent
         instance.pynode.addAttr("rootControl", at="message")
         instance.pynode.addAttr("hipsControl", at="message")
         instance.pynode.addAttr("chestControl", at="message")
