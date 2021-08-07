@@ -12,11 +12,6 @@ import luna_rig.functions.nodeFn as nodeFn
 import luna_rig.functions.rigFn as rigFn
 
 
-class _compSignals(QtCore.QObject):
-    removed = QtCore.Signal()
-    attached = QtCore.Signal(object)
-
-
 class Component(luna_rig.MetaNode):
 
     def __new__(cls, node=None):
@@ -24,7 +19,6 @@ class Component(luna_rig.MetaNode):
 
     def __init__(self, node):
         super(Component, self).__init__(node)
-        self.signals = _compSignals()
 
     @property
     def settings(self):
@@ -408,7 +402,6 @@ class AnimComponent(Component):
         self._delete_util_nodes()
         pm.delete(self.pynode)
         Logger.info("Removed {0}".format(self))
-        self.signals.removed.emit()
 
     def add_hook(self, node, name):
         """Set given node as attach point
@@ -468,7 +461,6 @@ class AnimComponent(Component):
             except Exception:
                 Logger.error("Failed to connect {0} to {1} at point {2}".format(self, other_comp, hook_index))
                 raise
-        self.signals.attached.emit(other_comp)
 
     def connect_to_character(self, character_component=None, character_name=None, parent=False):
         """Connect component to character
