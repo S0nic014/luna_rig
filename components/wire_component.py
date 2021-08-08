@@ -132,3 +132,19 @@ class WireComponent(luna_rig.AnimComponent):
         instance.group_joints.visibility.set(False)
 
         return instance
+
+    # ============== Getter methods =============== #
+    def get_wire_curve(self):
+        return self.wire_curve
+
+    def get_geometry(self):
+        return self.geometry
+
+    def get_wire_deformer(self):
+        return self.wire_deformer
+
+    def get_root_control(self):
+        return self.root_control
+
+    def get_shape_controls(self):
+        return self.shape_controls

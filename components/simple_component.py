@@ -54,6 +54,8 @@ class SimpleComponent(luna_rig.AnimComponent):
     def add_existing_control(self, control, as_hook=False, bind_joint=None):
 
         control.rename(name='_'.join([self.indexed_name, control.name]))
+        if not control.get_parent():
+            control.set_parent(self.group_ctls)
 
         # Connect to hook
         self._store_controls([control])
