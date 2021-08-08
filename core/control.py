@@ -466,11 +466,15 @@ class Control(object):
         :type parent: pm.PyNode
         """
         if isinstance(parent, Control):
-            pm.parent(self.group, parent.transform)
             connect_index = len(parent.tag_node.children.listConnections(d=1))
             self.tag_node.parent.connect(parent.tag_node.children[connect_index])
+            parent = parent.transform
         else:
             parent.message.connect(self.tag_node.parent, f=1)
+
+        if not isinstance(parent, pm.PyNode):
+            parent = pm.PyNode(parent)
+        pm.parent(self.group, parent)
 
     def get_parent(self, generations=1):
         """Get current parent
