@@ -42,6 +42,15 @@ class IKComponent(luna_rig.AnimComponent):
     def get_end_hook_index(self):
         return self.Hooks.END_JNT.value
 
+    def get_ik_control(self):
+        return self.ik_control
+
+    def get_pv_control(self):
+        return self.pv_control
+
+    def get_handle(self):
+        return self.handle
+
     @classmethod
     def create(cls,
                meta_parent=None,
@@ -51,6 +60,7 @@ class IKComponent(luna_rig.AnimComponent):
                name="ik_component",
                start_joint=None,
                end_joint=None,
+               control_world_orient=False,
                tag=""):
         # Create instance and add attrs
         instance = super(IKComponent, cls).create(meta_parent=meta_parent, side=side, name=name, character=character, tag=tag)  # type: IKComponent
@@ -79,6 +89,7 @@ class IKComponent(luna_rig.AnimComponent):
                                              attributes="tr",
                                              parent=instance.group_ctls,
                                              shape="cube",
+                                             match_orient=not control_world_orient,
                                              tag="ik")
         ik_handle = pm.ikHandle(n=nameFn.generate_name(instance.name, side=instance.side, suffix="ikh"),
                                 sj=ctl_chain[0],
@@ -121,7 +132,7 @@ class IKComponent(luna_rig.AnimComponent):
         instance.connect_to_character(parent=True)
         instance.attach_to_component(meta_parent, hook)
         # Store settings
-        instance._store_settings()
+        # instance._store_settings()
         # Scale controls
         scale_dict = {ik_control: 0.8,
                       pv_control: 0.1}
