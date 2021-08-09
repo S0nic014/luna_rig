@@ -159,6 +159,11 @@ class IKComponent(luna_rig.AnimComponent):
 class IKSplineComponent(luna_rig.AnimComponent):
 
     @property
+    def ik_curve(self):
+        crv = self.pynode.ikCurve.get()  # type: luna_rig.nt.Transform
+        return crv
+
+    @property
     def root_control(self):
         return luna_rig.Control(self.pynode.rootControl.get())
 
@@ -166,18 +171,32 @@ class IKSplineComponent(luna_rig.AnimComponent):
     def shape_controls(self):
         return [luna_rig.Control(conn) for conn in self.pynode.shapeControls.listConnections(d=1)]
 
+    # ============= Getter methods ============== #
+    def get_ik_curve(self):
+        return self.ik_curve
+
+    def get_root_control(self):
+        return self.root_control
+
+    def get_shape_controls(self):
+        return self.shape_controls
+
     @classmethod
     def create(cls,
                meta_parent=None,
                side='c',
                name='anim_component',
-               hook=None, character=None,
+               hook=None,
+               character=None,
                tag='',
                start_joint=None,
                end_joint=None,
                ik_curve=None,
                num_controls=None):
+        # Parse arguments
+        num_controls = int(num_controls) if not isinstance(num_controls, int) else num_controls
 
+        # Create instance and add attributes
         instance = super(IKSplineComponent, cls).create(meta_parent=meta_parent, side=side, name=name, hook=hook, character=character, tag=tag)  # type: IKSplineComponent
         instance.pynode.addAttr("ikCurve", at="message")
         instance.pynode.addAttr("rootControl", at="message")
