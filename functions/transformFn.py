@@ -1,6 +1,13 @@
 import pymel.core as pm
 import pymel.api as pma
 import luna_rig
+import luna.utils.enumFn as enumFn
+
+
+class WorldVector(enumFn.Enum):
+    X = [1.0, 0, 0]
+    Y = [0, 1.0, 0]
+    Z = [0, 0, 1.0]
 
 
 # Modified from https://gist.github.com/rondreas/1c6d4e5fc6535649780d5b65fc5a9283

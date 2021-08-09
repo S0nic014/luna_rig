@@ -4,6 +4,9 @@ import luna_rig
 import luna_rig.functions.attrFn as attrFn
 import luna_rig.functions.transformFn as transformFn
 
+DEFAULT_AIM_VECTOR = transformFn.WorldVector.Z
+DEFAULT_UP_VECTOR = transformFn.WorldVector.Y
+
 
 class EyeComponent(luna_rig.AnimComponent):
 
@@ -14,6 +17,13 @@ class EyeComponent(luna_rig.AnimComponent):
     @property
     def fk_control(self):
         return luna_rig.Control(self.pynode.fkControl.get())
+    # ============ Getter methods =========== #
+
+    def get_aim_control(self):
+        return self.aim_control
+
+    def get_fk_control(self):
+        return self.fk_control
 
     @classmethod
     def create(cls,
@@ -24,10 +34,28 @@ class EyeComponent(luna_rig.AnimComponent):
                character=None,
                meta_parent=None,
                hook=0,
-               aim_vector=[0, 0, 1],
-               up_vector=[0, 1, 0],
+               aim_vector=DEFAULT_AIM_VECTOR,
+               up_vector=DEFAULT_UP_VECTOR,
                target_wire=False,
                tag="face"):
+        # Parse arguments
+        if isinstance(aim_vector, str):
+            aim_vector = aim_vector.upper()
+            if aim_vector not in 'XYZ':
+                Logger.warning('{0}: Aim vector must be either x, y or z. Got {1}. Using default z'.format(cls.as_str(name_only=True), aim_vector))
+                aim_vector = DEFAULT_AIM_VECTOR.value
+            else:
+                aim_vector = transformFn.WorldVector[aim_vector].value
+
+        if isinstance(up_vector, str):
+            up_vector = up_vector.upper()
+            if up_vector not in 'XYZ':
+                Logger.warning('{0}: Up vector must be either x, y or z. Got {1}. Using default y'.format(cls.as_str(name_only=True), up_vector))
+                up_vector = DEFAULT_UP_VECTOR.value
+            else:
+                up_vector = transformFn.WorldVector[up_vector].value
+
+        # Create instance, add attributes
         instance = super(EyeComponent, cls).create(meta_parent=meta_parent, side=side, name=name, hook=hook, character=character, tag=tag)  # type: EyeComponent
         instance.pynode.addAttr("aimControl", at="message")
         instance.pynode.addAttr("fkControl", at="message")
