@@ -30,21 +30,39 @@ class RibbonComponent(luna_rig.AnimComponent):
     def is_fk(self):
         return self.pynode.fkHierarchy.get()
 
+    # ========== Getter methods =============== #
+
+    def get_surface(self):
+        return self.surface
+
+    def get_shape_controls(self):
+        return self.shape_controls
+
+    def get_main_control(self):
+        return self.main_control
+
+    def get_is_fk(self):
+        return self.is_fk
+
     @classmethod
     def create(cls,
                character=None,
                meta_parent=None,
                hook=0,
                side='c',
-               name='curve_ribbon',
+               name='ribbon',
                surface=None,
                num_controls=3,
                skel_joint_parent=None,
                use_span="u",
                fk_hierarchy=False,
-               override_num_rivets=None,
+               override_num_rivets=0,
                flip_rivets_normal=False,
                tag=""):
+        # Parse arguments
+        num_controls = int(num_controls) if not isinstance(num_controls, int) else num_controls
+        override_num_rivets = int(override_num_rivets) if not isinstance(override_num_rivets, int) else override_num_rivets
+
         # Metanode attributes
         instance = super(RibbonComponent, cls).create(meta_parent=meta_parent, side=side, name=name, hook=hook, character=character, tag=tag)  # type: RibbonComponent
         instance.pynode.addAttr("surface", at="message")
