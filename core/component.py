@@ -160,6 +160,7 @@ class AnimComponent(Component):
         noscale_grp = pm.group(n=nameFn.generate_name(instance.name, instance.side, suffix="noscale"), em=1, p=parts_grp)
         noscale_grp.inheritsTransform.set(0)
         out_grp = pm.group(n=nameFn.generate_name(instance.name, instance.side, suffix="out"), em=1, p=root_grp)
+        out_grp.visibility.set(0)
         for node in [root_grp, ctls_grp, joints_grp, parts_grp, noscale_grp, out_grp]:
             node.addAttr("metaParent", at="message")
 
