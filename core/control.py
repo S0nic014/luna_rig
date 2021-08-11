@@ -758,7 +758,7 @@ class Control(object):
         :return: [description]
         :rtype: [type]
         """
-        template = nameFn.get_current_template()
+        template = nameFn.get_template()
         if self.side not in ["l", "r"]:
             return None
         opposite_transform = template.format(side=static.OppositeSide[self.side].value, name=self.indexed_name, suffix="ctl")
