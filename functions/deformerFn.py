@@ -1,6 +1,8 @@
+import xml
 import pymel.core as pm
 import maya.cmds as mc
 from luna import Logger
+import luna.utils.fileFn as fileFn
 import luna_rig
 
 
@@ -82,6 +84,11 @@ def is_painted(deformer_node):
     return deformer_node.weightList.get(size=True) > 0
 
 
+def init_painted(deformer_node):
+    if not pm.getAttr('{0}.weightList'.format(deformer_node), size=True):
+        pm.setAttr('{0}.weightList[0].weights[0]'.format(deformer_node), 1)
+
+
 def get_deformer(node, type):
     def_list = pm.listHistory(node, type=type)
     return def_list[0] if def_list else None
@@ -97,3 +104,27 @@ def list_deformers(type, under_group=None):
     else:
         deformers_list = pm.ls(typ=type)
     return deformers_list
+
+
+def get_attributes_from_json(file_name):
+    d = {}
+    type_map = {"long": int,
+                "float": float,
+                "bool": bool}
+    json_data = fileFn.load_json(file_name)  # type: dict
+    for def_dict in json_data['deformerWeight']['deformers']:
+        for attr in def_dict.get('attributes', []):
+            attr_type = type_map[attr['type']]
+            d[attr['name']] = attr_type(attr['value'])
+    return d
+
+
+def get_attributes_from_xml(file_name):
+    d = {}
+    root = xml.etree.cElementTree.parse(file_name).getroot()
+    type_map = {"long": int,
+                "float": float,
+                "bool": bool}
+    for attr in root.find("deformer").findall("attribute"):
+        d[attr.get("name")] = type_map[attr.get("type")](attr.get("value"))
+    return d

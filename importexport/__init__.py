@@ -7,6 +7,7 @@ from luna_rig.importexport.posespace import PsdManager
 from luna_rig.importexport.driven_pose import DrivenPoseManager
 from luna_rig.importexport.sdk_corrective import SDKCorrectiveManager
 from luna_rig.importexport.nglayers2 import NgLayers2Manager
+from luna_rig.importexport.deltamush import DeltaMushManager
 
 if sys.version_info[0] < 3:
     from luna_rig.importexport.nglayers import NgLayersManager
