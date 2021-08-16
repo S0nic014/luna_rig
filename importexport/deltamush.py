@@ -93,10 +93,11 @@ class DeltaMushManager(manager_base.AbstractManager):
             manager.export_single(obj)
 
     @classmethod
-    def import_selected(cls):
+    def import_selected(cls, character=None):
         manager = cls()
+        character = character if character else rigFn.get_build_character()
         for obj in pm.selected():
-            manager.import_single(obj)
+            manager.import_single(obj, character)
 
 
 if __name__ == "__main__":
