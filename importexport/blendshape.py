@@ -9,8 +9,8 @@ import luna_rig.functions.deformerFn as deformerFn
 
 class BlendShapeManager(manager.AbstractManager):
 
-    def __init__(self):
-        super(BlendShapeManager, self).__init__("blendShape", "shape")
+    DATA_TYPE = "blendShape"
+    EXTENSION = "shape"
 
     @property
     def path(self):
@@ -20,10 +20,10 @@ class BlendShapeManager(manager.AbstractManager):
         return str(bs_node)
 
     def get_latest_file(self, bs_name, full_path=False):
-        return fileFn.get_latest_file(self.get_base_name(bs_name), self.path, extension=self.extension, full_path=full_path)
+        return fileFn.get_latest_file(self.get_base_name(bs_name), self.path, extension=self.EXTENSION, full_path=full_path)
 
     def get_new_file(self, bs_node):
-        return fileFn.get_new_versioned_file(self.get_base_name(bs_node), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_new_versioned_file(self.get_base_name(bs_node), self.path, extension=self.EXTENSION, full_path=True)
 
     def get_mapping(self):
         return fileFn.load_json(self.asset.mapping.blendshapes)
@@ -70,7 +70,7 @@ class BlendShapeManager(manager.AbstractManager):
             return False
         # Check if blendshape already exists and create one if not.
         geometry = pm.PyNode(geometry)  # type: luna_rig.nt.Shape
-        if bs_node not in [str(node) for node in geometry.listHistory(type=self.data_type)]:
+        if bs_node not in [str(node) for node in geometry.listHistory(type=self.DATA_TYPE)]:
             shape_node = pm.blendShape(geometry, n=bs_node, foc=1)  # type: luna_rig.nt.BlendShape
         else:
             shape_node = pm.PyNode(bs_node)  # type:  luna_rig.nt.BlendShape
@@ -87,7 +87,7 @@ class BlendShapeManager(manager.AbstractManager):
     def export_all(cls, under_group=static.CharacterMembers.geometry.value):
         bs_manager = cls()
         export_list = []
-        export_list = deformerFn.list_deformers(bs_manager.data_type, under_group=under_group)
+        export_list = deformerFn.list_deformers(cls.DATA_TYPE, under_group=under_group)
         for shape in export_list:
             bs_manager.export_single(shape)
 
@@ -100,13 +100,13 @@ class BlendShapeManager(manager.AbstractManager):
     @classmethod
     def export_selected(cls):
         manager = cls()
-        seleted = pm.selected(type=manager.data_type)
+        seleted = pm.selected(type=cls.DATA_TYPE)
         for bs_node in seleted:
             manager.export_single(bs_node)
 
     @classmethod
     def import_selected(cls):
         manager = cls()
-        seleted = pm.selected(type=manager.data_type)
+        seleted = pm.selected(type=cls.DATA_TYPE)
         for bs_node in seleted:
             manager.import_single(bs_node)

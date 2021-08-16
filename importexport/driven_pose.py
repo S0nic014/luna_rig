@@ -8,8 +8,8 @@ from luna_rig.importexport import manager
 
 class DrivenPoseManager(manager.AbstractManager):
 
-    def __init__(self):
-        super(DrivenPoseManager, self).__init__("pose", "json")
+    DATA_TYPE = 'pose'
+    EXTENSION = 'json'
 
     @property
     def path(self):
@@ -19,10 +19,10 @@ class DrivenPoseManager(manager.AbstractManager):
         return "{0}-{1}".format(component_name, pose_name)
 
     def get_new_file(self, node_name, pose_name):
-        return fileFn.get_new_versioned_file(self.get_base_name(node_name, pose_name), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_new_versioned_file(self.get_base_name(node_name, pose_name), self.path, extension=self.EXTENSION, full_path=True)
 
     def get_latest_file(self, node_name, pose_name):
-        return fileFn.get_latest_file(self.get_base_name(node_name, pose_name), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_latest_file(self.get_base_name(node_name, pose_name), self.path, extension=self.EXTENSION, full_path=True)
 
     def export_pose(self, component_node, controls_list, driver_ctl, pose_name, driver_value=10.0):
         pose_dict = {}
@@ -76,7 +76,7 @@ class DrivenPoseManager(manager.AbstractManager):
     def import_component_poses(self, component_node):
         if isinstance(component_node, luna_rig.AnimComponent):
             component_node = component_node.pynode.name()
-        for pose_path in fileFn.get_latest_from_sub_name(component_node, self.path, extension=self.extension, sub_index=0, sub_split="-"):
+        for pose_path in fileFn.get_latest_from_sub_name(component_node, self.path, extension=self.EXTENSION, sub_index=0, sub_split="-"):
             file_name = os.path.basename(pose_path)
             pose_name = file_name.split(".")[0].replace(component_node + "-", "")
             self.import_pose(component_node, pose_name)

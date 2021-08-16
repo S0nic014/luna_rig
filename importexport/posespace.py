@@ -8,8 +8,8 @@ from luna_rig.importexport import BlendShapeManager
 
 class PsdManager(manager_base.AbstractManager):
 
-    def __init__(self):
-        super(PsdManager, self).__init__("psd", "pose")
+    DATA_TYPE = 'psd'
+    EXTENSION = 'pose'
 
     @property
     def path(self):
@@ -19,10 +19,10 @@ class PsdManager(manager_base.AbstractManager):
         return self.asset.name
 
     def get_latest_file(self):
-        return fileFn.get_latest_file(self.get_base_name(), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_latest_file(self.get_base_name(), self.path, extension=self.EXTENSION, full_path=True)
 
     def get_new_file(self):
-        return fileFn.get_new_versioned_file(self.get_base_name(), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_new_versioned_file(self.get_base_name(), self.path, extension=self.EXTENSION, full_path=True)
 
     @classmethod
     def export_all(cls):

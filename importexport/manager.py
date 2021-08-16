@@ -14,26 +14,22 @@ class AbstractManager(object):
     - method: get_latest_file
     """
     __metaclass__ = abc.ABCMeta
+    DATA_TYPE = None
+    EXTENSION = None
 
     def __repr__(self):
         return self.__class__.__name__
 
-    def __init__(self, data_type, extension):
+    def __init__(self):
         """
-        :param data_type: Deformer type. Must match Maya's nodetype.
-        :type data_type: str
-        :param extension: Export file extension without dot.
-        :type extension: str
         :raises RuntimeError: If luna asset is not set
         """
-        self.data_type = data_type  # type :str
-        self.extension = extension  # type: str
         self.asset = luna.workspace.Asset.get()
         self.character = rigFn.get_build_character()
         if not self.asset:
             Logger.error("Asset is not set")
             raise RuntimeError
-        self.versioned_files = fileFn.get_versioned_files(self.path, extension=self.extension)
+        self.versioned_files = fileFn.get_versioned_files(self.path, extension=self.EXTENSION)
 
     @abc.abstractproperty
     def path(self):

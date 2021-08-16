@@ -12,8 +12,8 @@ from luna_rig.importexport import manager as manager_base
 
 class NgLayers2Manager(manager_base.AbstractManager):
 
-    def __init__(self):
-        super(NgLayers2Manager, self).__init__("ng_layers2", "layers")
+    DATA_TYPE = 'ng_layers2'
+    EXTENSION = 'layers'
 
     @property
     def path(self):
@@ -23,10 +23,10 @@ class NgLayers2Manager(manager_base.AbstractManager):
         return str(node)
 
     def get_new_file(self, node):
-        return fileFn.get_new_versioned_file(self.get_base_name(node), dir_path=self.path, extension=self.extension, full_path=True)
+        return fileFn.get_new_versioned_file(self.get_base_name(node), dir_path=self.path, extension=self.EXTENSION, full_path=True)
 
     def get_latest_file(self, node):
-        return fileFn.get_latest_file(self.get_base_name(node), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_latest_file(self.get_base_name(node), self.path, extension=self.EXTENSION, full_path=True)
 
     def export_single(self, node):
         # Get transform

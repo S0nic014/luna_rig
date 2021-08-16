@@ -17,8 +17,11 @@ import luna_rig.functions.deformerFn as deformerFn
 class SkinManager(AbstractManager):
     """Manager for skinCluster deformer."""
 
+    DATA_TYPE = "skinCluster"
+    EXTENSION = "skin"
+
     def __init__(self):
-        super(SkinManager, self).__init__("skinCluster", "skin")
+        super(SkinManager, self).__init__()
         self.file_format = luna.Config.get(luna.RigVars.skin_export_format, default="pickle")  # type: str
         # Verify format
         if self.file_format not in ["json", "pickle"]:
@@ -33,10 +36,10 @@ class SkinManager(AbstractManager):
         return str(node)
 
     def get_new_file(self, node):
-        return fileFn.get_new_versioned_file(self.get_base_name(node), dir_path=self.path, extension=self.extension, full_path=True)
+        return fileFn.get_new_versioned_file(self.get_base_name(node), dir_path=self.path, extension=self.EXTENSION, full_path=True)
 
     def get_latest_file(self, node):
-        return fileFn.get_latest_file(self.get_base_name(node), self.path, extension=self.extension, full_path=True)
+        return fileFn.get_latest_file(self.get_base_name(node), self.path, extension=self.EXTENSION, full_path=True)
 
     def export_single(self, node):
         """Export skinCluster for geometry node
@@ -44,10 +47,10 @@ class SkinManager(AbstractManager):
         :param node: Shape node with skinCluster attached.
         :type node: str, pm.PyNode
         """
-        deformer = deformerFn.get_deformer(node, self.data_type)
+        deformer = deformerFn.get_deformer(node, self.DATA_TYPE)
         # Do before export checks
         if not deformer:
-            Logger.warning("{0}: No {1} deformer found in {2} history".format(self, self.data_type, node))
+            Logger.warning("{0}: No {1} deformer found in {2} history".format(self, self.DATA_TYPE, node))
             return
         if not deformerFn.is_painted(deformer):
             Logger.warning("{0}: {1} on {2} has no weights initialized, nothing to export.".format(self, deformer, node))
@@ -85,7 +88,7 @@ class SkinManager(AbstractManager):
         :type under_group: str, pm.PyNode, optional
         """
         skin_manager = cls()
-        for deformer_node in deformerFn.list_deformers(skin_manager.data_type, under_group=under_group):
+        for deformer_node in deformerFn.list_deformers(cls.DATA_TYPE, under_group=under_group):
             geo_nodes = deformer_node.getGeometry()
             for geo in geo_nodes:
                 skin_manager.export_single(geo.getTransform())
