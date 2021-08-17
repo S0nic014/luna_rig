@@ -32,6 +32,8 @@ class SimpleComponent(luna_rig.AnimComponent):
         # Connect to hook
         self._store_controls([new_control])
         if parent:
+            if isinstance(parent, luna_rig.Control):
+                parent = parent.transform
             pm.parentConstraint(parent, new_control.group, mo=1)
         # Store hook
         if as_hook:
