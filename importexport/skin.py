@@ -2,6 +2,7 @@
 
 import pymel.core as pm
 import maya.OpenMaya as om
+import maya.cmds as cmds
 
 import luna_rig
 import luna
@@ -127,13 +128,45 @@ class SkinCluster(object):
 
     def get_geometry_components(self):
         # TODO: Causes Maya2022 Internal Failure
-        fn_set = om.MFnSet(self.pynode.__apimfn__().deformerSet())
-        members = om.MSelectionList()
-        fn_set.getMembers(members, False)
-        dag_path = om.MDagPath()
-        components = om.MObject()
-        members.getDagPath(0, dag_path, components)
+        try:
+            fn_set = om.MFnSet(self.pynode.__apimfn__().deformerSet())
+            members = om.MSelectionList()
+            fn_set.getMembers(members, False)
+            dag_path = om.MDagPath()
+            components = om.MObject()
+            members.getDagPath(0, dag_path, components)
+            return dag_path, components
+        except Exception:
+            return self.get_mesh_components_from_tag_expression()
+
+    def get_mesh_components_from_tag_expression(self, tag='*'):
+        geo_types = ['mesh', 'nurbsSurface', 'nurbsCurve']
+        for t in geo_types:
+            obj = self.pynode.listConnections(exactType=True, type=t)
+            if obj:
+                geo = obj[0].getShape().name()
+
+        # Get the geo out attribute for the shape
+        out_attr = cmds.deformableShape(geo, localShapeOutAttr=True)[0]
+
+        # Get the output geometry data as MObject
+        sel = om.MSelectionList()
+        sel.add(geo)
+        dep = om.MObject()
+        sel.getDependNode(0, dep)
+        fn_dep = om.MFnDependencyNode(dep)
+        plug = fn_dep.findPlug(out_attr, True)
+        obj = plug.asMObject()
+
+        # Use the MFnGeometryData class to query the components for a tag
+        # expression
+        fn_geodata = om.MFnGeometryData(obj)
+
+        # Components MObject
+        components = fn_geodata.resolveComponentTagExpression(tag)
+        dag_path = om.MDagPath.getAPathTo(dep)
         return dag_path, components
+
     # Collection
 
     def get_current_weights(self):
@@ -149,7 +182,7 @@ class SkinCluster(object):
         weights = self.get_current_weights()
         influence_paths = om.MDagPathArray()
         num_inluences = self.pynode.__apimfn__().influenceObjects(influence_paths)
-        num_comps_per_influence = weights.length() / num_inluences
+        num_comps_per_influence = int(weights.length() / num_inluences)
         for ii in range(influence_paths.length()):
             influence_name = influence_paths[ii].partialPathName()
             influence_name_no_ns = pm.PyNode(influence_name).stripNamespace()
@@ -182,7 +215,7 @@ class SkinCluster(object):
         weights = self.get_current_weights()
         influence_paths = om.MDagPathArray()
         num_influences = self.pynode.__apimfn__().influenceObjects(influence_paths)
-        num_comps_per_influence = weights.length() / num_influences
+        num_comps_per_influence = int(weights.length() / num_influences)
         for imported_influence, imported_weights in skin_data["weights"].items():
             for ii in range(influence_paths.length()):
                 influence_name = influence_paths[ii].partialPathName()
