@@ -207,6 +207,9 @@ class MetaNode(object):
                 if not of_type:
                     result = children
                 else:
+                    if not isinstance(of_type, type):
+                        of_type = type(of_type)
+
                     if isinstance(of_type, str):
                         result = [child for child in children if of_type in child.as_str()]
                     else:
@@ -238,6 +241,9 @@ class MetaNode(object):
         result = []
         all_nodes = [MetaNode(node) for node in pm.ls(typ="network") if node.hasAttr("metaType")]
         if of_type:
+            if not isinstance(of_type, type):
+                of_type = type(of_type)
+
             if isinstance(of_type, str):
                 result = [node for node in all_nodes if of_type in node.as_str()]
             else:
